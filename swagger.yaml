@@ -1,80 +1,68 @@
 openapi: 3.0.2
 info:
-  title: ITA21
+  title: books_library_TBR
   version: 1.0.0
-  description: Demonstration API
 paths:
-  /sessions:
-    summary: Path used to manage the list of sessions.
+  /users:
+    summary: Path used to manage the list of users.
     description: >-
-      The REST endpoint/path used to list and create zero or more `Session` entities.  This path
-      contains a `GET` and `POST` operation to perform the list and create tasks, respectively.
+      The REST endpoint/path used to list and create zero or more `User` entities.  This path contains a
+      `GET` and `POST` operation to perform the list and create tasks, respectively.
     post:
       requestBody:
-        description: A new `Session` to be created.
+        description: A new `User` to be created.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Session'
+              $ref: '#/components/schemas/User'
+            examples:
+              User:
+                value:
+                  email: user@gmail.com
+                  password: user
         required: true
       tags:
-        - /sessions
+        - /users
       responses:
         '201':
+          description: Successful response.
+        '400':
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Session'
+            text/html:
               examples:
-                Session:
-                  value:
-                    sessionId: 841959fa-b0b9-4185-8673-1531c59cd6c9
-          description: Successful sign in.
-      operationId: createSession
-      summary: Create a Session
-      description: Creates a new instance of a `Session`.
-    delete:
-      tags:
-        - /sessions
-      responses:
-        '204':
-          description: Successful signout
-      security:
-        -
-          Bearer: []
-      summary: Destroy a session
-      description: 'Destorys a `Session`, effectively signing out.'
+                Email and password are required:
+                  value: Email and password are required
+                'Unexpected token } in JSON at position 32':
+                  value: 'Unexpected token } in JSON at position 32'
+          description: Bad Request
+        '409':
+          content:
+            text/html:
+              examples:
+                Email already exists:
+                  value: Email already exists
+          description: Email already exists
+      operationId: createUser
+      summary: Create a User
+      description: Creates a new instance of a `User`.
 components:
   schemas:
-    Credentials:
-      title: Root Type for Credentials
+    User:
+      title: Root Type for User
       description: ''
       type: object
       properties:
+        id:
+          format: int32
+          type: integer
         email:
           type: string
         password:
           type: string
       example:
-        email: admin@example.com
-        password: '1234'
-    Session:
-      title: Root Type for Session
-      description: ''
-      type: object
-      properties:
-        email:
-          type: string
-        password:
-          type: string
-      example:
-        email: admin@admin.com
-        password: admin
-  securitySchemes:
-    Bearer:
-      scheme: bearer
-      type: http
+        id: 1
+        email: tauri.saar123@gmail.com
+        password: suema
 tags:
-  -
-    name: /sessions
-    description: Operations with sessions
+  - name: /users
+    description: ''
